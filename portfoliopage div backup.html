@@ -1,0 +1,98 @@
+<html>
+<head>
+
+<title>portfolio builder</title>
+
+<link rel="stylesheet" href="mystyle.css">
+
+</head>
+
+<body>
+
+<div class="body">
+
+<div class="header">
+<center><img src="logo.png" alt="logo" width="375" height="75"></center>
+</div>
+
+<div id="portfolioList" class="portfolio">
+  
+</div>
+
+<div class="bottom">
+<p>mischmosch</p>
+</div>
+
+</div>
+
+  <script>
+
+  let portfolioContent = {AAPL: 0.2, TSLA: 0.8};
+  let key = Object.keys(portfolioContent)
+  counter = 0;
+
+
+  for (let i = 0; i < Object.keys(portfolioContent).length; i++) {
+
+    var div = document.createElement("div");
+    div.setAttribute("id", "div"+i);
+    div.style.height = "20px";
+    div.style.background = "#FAFAFA";
+    div.style.color = "#333";
+    div.style.marginTop = "5px";
+    div.style.padding = "10px";
+    div.style.borderRadius = "7px";
+    div.style.border = "1px solid #000";
+    div.style.justifyContent = "space-between";
+    div.style.display = "flex";
+
+    document.getElementById("portfolioList").appendChild(div);
+
+    for (let j = 0; j < 3; j++) {
+      var subDiv = document.createElement("div");
+      subDiv.setAttribute("id", "subDiv"+counter);
+
+      if (j == 0) {
+        subDiv.innerHTML = key[i];
+        document.getElementById("div"+i).appendChild(subDiv);
+      } 
+      else if (j == 1) {
+        subDiv.innerHTML = 100*portfolioContent[key[i]] + "%";
+        document.getElementById("div"+i).appendChild(subDiv);
+      }
+      else if (j == 2) {
+        document.getElementById("div"+i).appendChild(subDiv);
+        document.getElementById("subDiv"+counter).innerHTML = 10;//let data = getPrice(key[i],counter);
+      }
+      counter = counter + 1 ;
+    }
+
+  }
+
+  async function getPrice(symbol,counter) {
+
+    stockSymbol = symbol;
+    const apiUrl = 'https://financialmodelingprep.com/api/v3/quote-short/' + stockSymbol + '?apikey=dDcrakFObwFUGIujR0hDtQP7kMIloQlO';
+
+    const price = await fetch(apiUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Display data in an HTML element
+        data = data[0];
+        document.getElementById("subDiv"+counter).innerHTML = data["price"];
+      })
+      .catch(error => {
+        console.error('Error:', error);
+    });
+  }
+  
+  </script>
+
+</body>
+
+</html>

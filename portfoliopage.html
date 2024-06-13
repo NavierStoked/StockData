@@ -1,0 +1,161 @@
+<html>
+<head>
+
+<title>portfolio builder</title>
+
+<link rel="stylesheet" href="mystyle.css">
+
+<script src='https://cdn.plot.ly/plotly-2.32.0.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js'></script>
+
+
+</head>
+
+<body>
+
+<div class="body">
+
+<div class="header">
+<center><img src="logo.png" alt="logo" width="375" height="75"></center>
+</div>
+
+<div style="text-align: center">
+<div id='myDiv' style="width:50%; display:inline-block"><!-- Plotly chart will be drawn inside this DIV --></div>
+</div>
+<div id="output"></div>
+
+
+<div id="portfolioList" class="portfolio">
+
+</div>
+
+<div class="bottom">
+<p>mischmosch</p>
+</div>
+
+</div>
+
+<script>
+
+/*let portfolioContent = {AAPL: 0.2, TSLA: 0.8};
+let key = Object.keys(portfolioContent)
+counter = 0;
+
+var table = document.createElement("table");
+table.setAttribute("id", "portfolioTable");
+document.getElementById("portfolioList").appendChild(table);
+
+var headrow = document.createElement("tr");
+headrow.setAttribute("id", "headrow");
+document.getElementById("portfolioTable").appendChild(headrow);
+
+var headitem = document.createElement("th");
+headitem.innerHTML = "stock name";
+document.getElementById("headrow").appendChild(headitem);
+headitem = document.createElement("th");
+headitem.innerHTML = "percentage";
+document.getElementById("headrow").appendChild(headitem);
+headitem = document.createElement("th");
+headitem.innerHTML = "gain";
+document.getElementById("headrow").appendChild(headitem);
+
+
+for (let i = 0; i < Object.keys(portfolioContent).length; i++) {
+
+  var itemRow = document.createElement("tr");
+  itemRow.setAttribute("id", "tr"+i);
+
+  document.getElementById("portfolioTable").appendChild(itemRow);
+
+  for (let j = 0; j < 3; j++) {
+    var itemData = document.createElement("td");
+    itemData.setAttribute("id", "itemData"+counter);
+
+    if (j == 0) {
+      itemData.innerHTML = key[i];
+      document.getElementById("tr"+i).appendChild(itemData);
+    } 
+    else if (j == 1) {
+      itemData.innerHTML = 100*portfolioContent[key[i]] + "%";
+      document.getElementById("tr"+i).appendChild(itemData);
+    }
+    else if (j == 2) {
+      document.getElementById("tr"+i).appendChild(itemData);
+      document.getElementById("itemData"+counter).innerHTML = getPrice(key[i],counter);
+    }
+    counter = counter + 1 ;
+  }
+
+}
+
+async function getPrice(symbol,counter) {
+
+  stockSymbol = symbol;
+  const apiUrl = 'https://financialmodelingprep.com/api/v3/quote-short/' + stockSymbol + '?apikey=dDcrakFObwFUGIujR0hDtQP7kMIloQlO';
+
+  const price = await fetch(apiUrl)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Display data in an HTML element
+      data = data[0];
+      document.getElementById("itemData"+counter).innerHTML = data["price"];
+    })
+    .catch(error => {
+      console.error('Error:', error);
+  });
+}*/
+
+--------chart-----------
+
+d3.csv("https://raw.githubusercontent.com/plotly/datasets/master/finance-charts-apple.csv", function(err, rows){
+
+  function unpack(rows, key) {
+  return rows.map(function(row) { return row[key]; });
+}
+
+
+var trace1 = {
+  type: "scatter",
+  mode: "lines",
+  x: unpack(rows, 'Date'),
+  y: unpack(rows, 'AAPL.High'),
+  line: {color: '#17BECF'}
+}
+
+var trace2 = {
+  type: "scatter",
+  mode: "lines",
+  x: unpack(rows, 'Date'),
+  y: unpack(rows, 'AAPL.Low'),
+  line: {color: '#7F7F7F'}
+}
+
+var data = [trace1,trace2];
+
+var layout = {
+  title: 'Custom Range',
+  xaxis: {
+    range: ['2016-07-01', '2016-12-31'],
+    type: 'date'
+  },
+  yaxis: {
+    autorange: true,
+    range: [86.8700008333, 138.870004167],
+    type: 'linear'
+  }
+};
+
+Plotly.newPlot('myDiv', data, layout);
+})
+
+
+</script>
+
+</body>
+
+</html>
